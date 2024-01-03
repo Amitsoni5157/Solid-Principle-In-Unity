@@ -2,30 +2,33 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class PlayerParticles : MonoBehaviour
+namespace Single_Responsibility_Principle
 {
-    [SerializeField]
-    private GameObject thrusterParticle;
-    [SerializeField]
-    private GameObject deathParticleSystemPrefab;
-
-    private void Awake()
+    public class PlayerParticles : MonoBehaviour
     {
-        GetComponent<PlayerMovement>().thrustChanged += HandleThrustChanged;
+        [SerializeField]
+        private GameObject thrusterParticle;
+        [SerializeField]
+        private GameObject deathParticleSystemPrefab;
 
-        if (GetComponent<PlayerHealth>() != null)
-            GetComponent<PlayerHealth>().OnDie += HandlePlayerChanged;
+        private void Awake()
+        {
+            GetComponent<PlayerMovement>().thrustChanged += HandleThrustChanged;
+
+            if (GetComponent<PlayerHealth>() != null)
+                GetComponent<PlayerHealth>().OnDie += HandlePlayerChanged;
+        }
+
+        private void HandleThrustChanged(float thrust)
+        {
+            if(thrusterParticle!= null)
+            thrusterParticle.SetActive(thrust > 0);
+        }
+
+        private void HandlePlayerChanged()
+        {
+            Instantiate(deathParticleSystemPrefab, transform.position, Quaternion.identity);
+        }
+
     }
-
-    private void HandleThrustChanged(float thrust)
-    {
-        thrusterParticle.SetActive(thrust > 0);
-    }
-
-    private void HandlePlayerChanged()
-    {
-        Instantiate(deathParticleSystemPrefab, transform.position, Quaternion.identity);
-    }
-
 }

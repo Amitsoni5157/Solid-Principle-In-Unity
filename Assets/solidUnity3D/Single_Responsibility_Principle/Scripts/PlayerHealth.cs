@@ -2,41 +2,43 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class PlayerHealth : MonoBehaviour
+namespace Single_Responsibility_Principle
 {
-    [SerializeField]
-    private int maxHealth = 100;
-    private int health;
-
-    public event Action OnDie = delegate { };
-
-    private void Awake()
+    public class PlayerHealth : MonoBehaviour
     {
-        health = maxHealth;
-    }
+        [SerializeField]
+        private int maxHealth = 100;
+        private int health;
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        var projectile = collision.collider.GetComponent<Projectile>();
-        if(projectile != null)
+        public event Action OnDie = delegate { };
+
+        private void Awake()
         {
-            TakeDamage(projectile.Damage);
+            health = maxHealth;
         }
-    }
 
-    private void TakeDamage(int  damage)
-    {
-        health -= damage;
-        if(health <= 0)
+        private void OnCollisionEnter(Collision collision)
         {
-            Die();
+            var projectile = collision.collider.GetComponent<Projectile>();
+            if (projectile != null)
+            {
+                TakeDamage(projectile.Damage);
+            }
         }
-    }
 
-    private void Die()
-    {
-        OnDie();
-        Destroy(gameObject);
+        private void TakeDamage(int damage)
+        {
+            health -= damage;
+            if (health <= 0)
+            {
+                Die();
+            }
+        }
+
+        private void Die()
+        {
+            OnDie();
+            Destroy(gameObject);
+        }
     }
 }
