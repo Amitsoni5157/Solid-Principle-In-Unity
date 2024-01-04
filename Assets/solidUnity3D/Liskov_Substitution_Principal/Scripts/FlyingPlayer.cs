@@ -9,7 +9,5 @@ namespace Liskov_Substitution_Principal
         {
             base.TakeDamage(amount);
         }
-
-    
     }
 }
